@@ -1,105 +1,48 @@
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/lizardruss/install-loft-cli/actions"><img alt="install-loft-cli status" src="https://github.com/lizardruss/install-loft-cli/workflows/build-test/badge.svg"></a>
 </p>
 
-# Create a JavaScript Action using TypeScript
+# Install Loft CLI GitHub Action
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+This is a GitHub Action to install the Loft CLI and log in to the provided Loft instance. Windows, Mac, and Linux runners are supported.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+## Usage
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+This action will install the Loft CLI for use in job steps and automatically log in to your Loft instance. The default behavior installs the latest release from [Loft Releases](https://github.com/loft-sh/loft/releases). Subsequent steps may run any `loft` CLI command.
 
-## Create an action from this template
+It is recommended that you use encrypted secrets for storing your access key. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key. To configure a secret, please see the [GitHub Actions Encrypted Secrets Documentation](https://docs.github.com/en/actions/reference/encrypted-secrets). The following examples assume that you have configured a secret named `LOFT_ACCESS_KEY`.
 
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
+### Example: Use a specific Loft Version and Login
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+name: loft version
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Loft
+        uses: lizardruss/install-loft-cli
+        with:
+          version: v1.14.0
+          loft-url: ${{ secrets.LOFT_URL }}
+          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - name: Show Version
+        run: loft --version
+      - name: Show Username
+        run: loft vars username
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+## Customizing
 
-## Usage:
+### inputs
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+The following inputs can be used as `step.with` keys. 
+
+| Name                | Type     | Description                        |
+|---------------------|----------|------------------------------------|
+| `version`           | String   | The version of Loft CLI to install. See [Loft Releases](https://github.com/loft-sh/loft/releases) for available versions.
+| `loft-access-key`        | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
+| `loft-url`          | String   | The URL used to access your Loft instance.
