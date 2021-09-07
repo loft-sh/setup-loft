@@ -10,9 +10,11 @@ This is a GitHub Action to install the Loft CLI and log in to the provided Loft 
 
 This action will install the Loft CLI for use in job steps and automatically log in to your Loft instance. The default behavior installs the latest release from [Loft Releases](https://github.com/loft-sh/loft/releases). Subsequent steps may run any `loft` CLI command.
 
-It is recommended that you use encrypted secrets for storing your access key. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key. To configure a secret, please see the [GitHub Actions Encrypted Secrets Documentation](https://docs.github.com/en/actions/reference/encrypted-secrets). The following examples assume that you have configured a secret named `LOFT_ACCESS_KEY`.
+It is recommended that you use encrypted secrets for storing your access key. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key. To configure a secret, please see the [GitHub Actions Encrypted Secrets Documentation](https://docs.github.com/en/actions/reference/encrypted-secrets). The following examples assume that you have configured secrets named `LOFT_ACCESS_KEY` and `LOFT_URL`.
 
-### Example: Use a specific Loft Version and Login
+To avoid leaking your Loft access key onto GitHub runners, this action will remove the `~/.loft` directory at the end of the job.
+
+### Example: Use a specific Loft version and login
 ```yaml
 name: loft version
 on:
@@ -24,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Loft
-        uses: lizardruss/install-loft-cli
+        uses: lizardruss/install-loft-cli@main
         with:
           version: v1.14.0
           loft-url: ${{ secrets.LOFT_URL }}

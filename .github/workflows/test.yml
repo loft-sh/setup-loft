@@ -43,4 +43,4 @@ jobs:
           loft-url: ${{ secrets.LOFT_URL }}
           loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - run: loft --version
-      # - run: loft vars username
+      - run: loft vars username
