@@ -9,7 +9,9 @@
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "npm run package:main && npm run package:cleanup",
+    "package:main": "ncc build lib/main.js --source-map --license licenses.txt --out dist/main",
+    "package:cleanup": "ncc build lib/cleanup.js --source-map --license licenses.txt --out dist/cleanup",
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
@@ -29,7 +31,7 @@
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@types/node": "^16.3.3",
+    "@types/node": "^16.7.13",
     "@types/node-fetch": "^2.5.12",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.29.0",
