@@ -171,7 +171,7 @@ exports.loginToLoft = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const exec_1 = __nccwpck_require__(514);
 const url_1 = __nccwpck_require__(835);
-function loginToLoft(url, accessKey, insecure) {
+function loginToLoft(url, accessKey, insecure, dockerLogin) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url === '') {
             throw new Error('No Loft url provided');
@@ -186,9 +186,7 @@ function loginToLoft(url, accessKey, insecure) {
             throw new Error('No Loft access key provided');
         }
         try {
-            yield exec_1.exec(insecure
-                ? `loft login ${url} --access-key ${accessKey} --insecure`
-                : `loft login ${url} --access-key ${accessKey}`);
+            yield exec_1.exec(`loft login ${url} --access-key ${accessKey} --docker-login=${dockerLogin} --insecure=${insecure}`);
         }
         catch (error) {
             core.debug(`Loft command failed:
@@ -266,7 +264,8 @@ function run() {
                 required: true
             });
             const insecure = core.getBooleanInput('insecure');
-            yield login_1.loginToLoft(loftUrl, loftAccessKey, insecure);
+            const dockerLogin = core.getBooleanInput('docker-login');
+            yield login_1.loginToLoft(loftUrl, loftAccessKey, insecure, dockerLogin);
         }
         catch (error) {
             core.setFailed(error.message);

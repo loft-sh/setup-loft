@@ -5,7 +5,8 @@ import {URL} from 'url'
 export async function loginToLoft(
   url: string,
   accessKey: string,
-  insecure: boolean
+  insecure: boolean,
+  dockerLogin: boolean
 ): Promise<void> {
   if (url === '') {
     throw new Error('No Loft url provided')
@@ -23,9 +24,7 @@ export async function loginToLoft(
 
   try {
     await exec(
-      insecure
-        ? `loft login ${url} --access-key ${accessKey} --insecure`
-        : `loft login ${url} --access-key ${accessKey}`
+      `loft login ${url} --access-key ${accessKey} --docker-login=${dockerLogin} --insecure=${insecure}`
     )
   } catch (error) {
     core.debug(`Loft command failed:

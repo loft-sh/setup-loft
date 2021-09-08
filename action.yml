@@ -13,9 +13,13 @@ inputs:
     description: 'The Loft URL'
     required: true
   insecure:
-    description: 'Allow login into an insecure loft instance'
+    description: 'Allow login into an insecure loft instance (default false)'
     required: false
     default: false
+  docker-login:
+    description: 'If true, will log into the docker image registries the user has image pull secrets for (default true)'
+    required: false
+    default: true
 runs:
   using: 'node12'
   main: 'dist/main/index.js'

@@ -49,3 +49,4 @@ The following inputs can be used as `step.with` keys.
 | `loft-access-key`   | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
 | `loft-url`          | String   | The URL used to access your Loft instance.
 | `insecure`          | Boolean  | Allow login into an insecure loft instance
+| `docker-login`      | Boolean  | If true, will log into the docker image registries the user has image pull secrets for (default true)

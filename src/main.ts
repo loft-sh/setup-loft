@@ -24,7 +24,8 @@ async function run(): Promise<void> {
       required: true
     })
     const insecure: boolean = core.getBooleanInput('insecure')
-    await loginToLoft(loftUrl, loftAccessKey, insecure)
+    const dockerLogin: boolean = core.getBooleanInput('docker-login')
+    await loginToLoft(loftUrl, loftAccessKey, insecure, dockerLogin)
   } catch (error) {
     core.setFailed(error.message)
   } finally {
