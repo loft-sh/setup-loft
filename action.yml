@@ -12,6 +12,10 @@ inputs:
   loft-url:
     description: 'The Loft URL'
     required: true
+  insecure:
+    description: 'Allow login into an insecure loft instance'
+    required: false
+    default: false
 runs:
   using: 'node12'
   main: 'dist/main/index.js'

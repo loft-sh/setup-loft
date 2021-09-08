@@ -23,7 +23,8 @@ async function run(): Promise<void> {
     const loftAccessKey: string = core.getInput('loft-access-key', {
       required: true
     })
-    await loginToLoft(loftUrl, loftAccessKey)
+    const insecure: boolean = core.getBooleanInput('insecure')
+    await loginToLoft(loftUrl, loftAccessKey, insecure)
   } catch (error) {
     core.setFailed(error.message)
   } finally {

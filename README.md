@@ -46,5 +46,6 @@ The following inputs can be used as `step.with` keys.
 | Name                | Type     | Description                        |
 |---------------------|----------|------------------------------------|
 | `version`           | String   | The version of Loft CLI to install. See [Loft Releases](https://github.com/loft-sh/loft/releases) for available versions.
-| `loft-access-key`        | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
+| `loft-access-key`   | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
 | `loft-url`          | String   | The URL used to access your Loft instance.
+| `insecure`          | Boolean  | Allow login into an insecure loft instance
