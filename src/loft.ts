@@ -3,53 +3,41 @@ import * as tc from '@actions/tool-cache'
 import * as fs from 'fs'
 import * as path from 'path'
 import fetch from 'node-fetch'
-
-const platformUrlMapping: {[key: string]: string} = {
-  linux: 'linux',
-  darwin: 'darwin',
-  win32: 'windows'
-}
-
-const architectureMapping: {[key: string]: string} = {
-  amd64: 'amd64',
-  arm64: 'arm64',
-  x64: 'amd64'
-}
-
-export function isWindows(platform: string): boolean {
-  return platform.startsWith('win')
-}
-
-export function binaryName(platform: string): string {
-  return isWindows(platform) ? 'loft.exe' : 'loft'
-}
+import {
+  binaryName,
+  getArchitecture,
+  getGitVersion,
+  getPlatform,
+  isWindows
+} from './util'
 
 export async function binaryUrl(
   platform: string,
   architecture: string,
   version: string
 ): Promise<string> {
-  if (!(platform in platformUrlMapping)) {
-    throw new Error(
-      `Unsupported operating system ${platform} - Loft CLI is only released for Darwin, Linux and Windows`
-    )
+  let sanitizedArchitecture
+  try {
+    sanitizedArchitecture = getArchitecture(architecture)
+  } catch (error) {
+    throw new Error(`Unsupported architecture ${architecture}`)
   }
 
-  if (!(architecture in architectureMapping)) {
-    throw new Error(`Unsupported architecture ${platform}`)
+  let sanitizedPlatform
+  try {
+    sanitizedPlatform = getPlatform(platform)
+  } catch (error) {
+    throw new Error(
+      `Unsupported operating system ${platform} - DevSpace is only released for Darwin, Linux and Windows`
+    )
   }
 
   let sanitizedVerson = version
   if (version === 'latest') {
     sanitizedVerson = await getLatestVersion()
   }
+  sanitizedVerson = getGitVersion(sanitizedVerson)
 
-  if (!sanitizedVerson.startsWith('v')) {
-    sanitizedVerson = `v${sanitizedVerson}`
-  }
-
-  const sanitizedArchitecture = architectureMapping[architecture]
-  const sanitizedPlatform = platformUrlMapping[platform]
   const binaryExt = isWindows(platform) ? '.exe' : ''
   return `https://github.com/loft-sh/loft/releases/download/${sanitizedVerson}/loft-${sanitizedPlatform}-${sanitizedArchitecture}${binaryExt}`
 }
@@ -80,7 +68,7 @@ export async function installLoft(
   architecture: string,
   version: string
 ): Promise<string> {
-  const cliName = binaryName(platform)
+  const cliName = binaryName(platform, 'loft')
 
   core.info(`Checking for cached loft: ${version}`)
   const cachedDir = tc.find(cliName, version)
