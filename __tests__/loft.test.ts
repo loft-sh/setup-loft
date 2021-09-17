@@ -1,18 +1,6 @@
 import {expect, test} from '@jest/globals'
 
-import {binaryName, binaryUrl, isWindows} from '../src/install'
-
-test('isWindows(platform: string)', () => {
-  expect(isWindows('win32')).toEqual(true)
-  expect(isWindows('darwin')).toEqual(false)
-  expect(isWindows('linux')).toEqual(false)
-})
-
-test('binaryName(platform: string)', () => {
-  expect(binaryName('win32')).toEqual('loft.exe')
-  expect(binaryName('darwin')).toEqual('loft')
-  expect(binaryName('linux')).toEqual('loft')
-})
+import {binaryUrl} from '../src/loft'
 
 test('binaryUrl(platform: string, architecture: string, version: string)', () => {
   expect(binaryUrl('darwin', 'arm64', '5.14.4')).resolves.toEqual(

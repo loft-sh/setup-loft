@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lizardruss/install-loft-cli.git"
+    "url": "git+https://github.com/loft-sh/setup-loft.git"
   },
   "keywords": [
     "actions",

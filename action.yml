@@ -6,11 +6,11 @@ inputs:
     description: 'The version of loft to install'
     required: false
     default: 'latest'
-  loft-access-key:
-    description: 'The Loft Access Key'
-    required: true
-  loft-url:
+  url:
     description: 'The Loft URL'
+    required: true
+  access-key:
+    description: 'The Loft Access Key'
     required: true
   insecure:
     description: 'Allow login into an insecure loft instance (default false)'
@@ -20,6 +20,14 @@ inputs:
     description: 'If true, will log into the docker image registries the user has image pull secrets for (default true)'
     required: false
     default: true
+  kubectl-install:
+    description: 'Install kubectl if not already installed'
+    required: false
+    default: false
+  kubectl-version:
+    decription: 'The version of the kubectl to install'
+    required: false
+    default: 'latest'
 runs:
   using: 'node12'
   main: 'dist/main/index.js'

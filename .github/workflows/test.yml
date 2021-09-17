@@ -14,9 +14,7 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
-    env:
-      ACTIONS_STEP_DEBUG: true
+  test:
     strategy:
       matrix:
         os:
@@ -26,7 +24,6 @@ jobs:
           - ubuntu-latest
           - ubuntu-20.04
           - ubuntu-18.04
-          # - ubuntu-16.04
           - macos-latest
           - macos-11
           - macos-10.15
@@ -34,13 +31,43 @@ jobs:
           - v1.15.0-beta.1
           - 1.15.0-beta.1
           - latest
+          - ~
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
           version: ${{ matrix.version }}
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - run: loft --version
       - run: loft vars username
+  test-kubectl-install:
+    strategy:
+      matrix:
+        os:
+          - windows-latest
+          - windows-2022
+          - windows-2019
+          - ubuntu-latest
+          - ubuntu-20.04
+          - ubuntu-18.04
+          - macos-latest
+          - macos-11
+          - macos-10.15
+        kubectl-version:
+          - v1.21.0
+          - 1.21.0
+          - latest
+          - ~
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          version: latest
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          kubectl-install: true
+          kubectl-version: ${{ matrix.kubectl-version }}
+      - run: kubectl version --client --short

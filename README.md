@@ -1,8 +1,8 @@
 <p align="center">
-  <a href="https://github.com/lizardruss/install-loft-cli/actions"><img alt="install-loft-cli status" src="https://github.com/lizardruss/install-loft-cli/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/loft-sh/setup-loft/actions"><img alt="install-loft-cli status" src="https://github.com/loft-sh/setup-loft/workflows/build-test/badge.svg"></a>
 </p>
 
-# Install Loft CLI GitHub Action
+# setup-loft
 
 This is a GitHub Action to install the Loft CLI and log in to the provided Loft instance. Windows, Mac, and Linux runners are supported.
 
@@ -26,11 +26,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Loft
-        uses: lizardruss/install-loft-cli@main
+        uses: loft-sh/setup-loft@main
         with:
           version: v1.14.0
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - name: Show Version
+        run: loft --version
+      - name: Show Username
+        run: loft vars username
+```
+
+## Install `kubectl`
+
+Options are provided to install `kubectl`. Many GitHub runners now come with `kubectl` pre-installed, however this allows for controlling the version of `kubectl` if desired.
+
+### Example: Login to loft, and install a specific kubectl version
+```yaml
+name: loft version
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Loft
+        uses: loft-sh/setup-loft@main
+        with:
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          kubectl-install: true
+          kubectl-version: v1.21.0
       - name: Show Version
         run: loft --version
       - name: Show Username
@@ -46,7 +74,9 @@ The following inputs can be used as `step.with` keys.
 | Name                | Type     | Description                        |
 |---------------------|----------|------------------------------------|
 | `version`           | String   | The version of Loft CLI to install. See [Loft Releases](https://github.com/loft-sh/loft/releases) for available versions.
-| `loft-access-key`   | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
-| `loft-url`          | String   | The URL used to access your Loft instance.
+| `url`          | String   | The URL used to access your Loft instance.
+| `access-key`   | String   | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key.
 | `insecure`          | Boolean  | Allow login into an insecure loft instance
 | `docker-login`      | Boolean  | If true, will log into the docker image registries the user has image pull secrets for (default true)
+| `kubectl-install`        | Boolean  | Install kubectl if not already installed
+| `kubectl-version`        | String   | The version of the kubectl to install
