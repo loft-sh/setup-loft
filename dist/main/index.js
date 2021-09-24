@@ -290,17 +290,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loginToLoft = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const exec_1 = __nccwpck_require__(514);
-const url_1 = __nccwpck_require__(835);
 function loginToLoft(url, accessKey, insecure, dockerLogin) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url === '') {
             throw new Error('No Loft url provided');
-        }
-        try {
-            new url_1.URL(url);
-        }
-        catch (error) {
-            throw new Error('Invalid Loft url provided');
         }
         if (accessKey === '') {
             throw new Error('No Loft access key provided');

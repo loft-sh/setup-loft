@@ -9,12 +9,6 @@ describe('loginToLoft(url: string, accessKey: string)', () => {
     )
   })
 
-  test('with invalid url', async () => {
-    await expect(loginToLoft('$url', 'foo', false, false)).rejects.toThrow(
-      'Invalid Loft url provided'
-    )
-  })
-
   test('with empty accessKey', async () => {
     await expect(
       loginToLoft('https://prod.loft.rocks', '', false, false)
