@@ -28,7 +28,7 @@ jobs:
       - name: Install Loft
         uses: loft-sh/setup-loft@main
         with:
-          version: v1.14.0
+          # version: v1.15.0
           url: ${{ secrets.LOFT_URL }}
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - name: Show Version
