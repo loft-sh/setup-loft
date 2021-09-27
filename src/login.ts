@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import {exec} from '@actions/exec'
-import {URL} from 'url'
 
 export async function loginToLoft(
   url: string,
@@ -10,12 +9,6 @@ export async function loginToLoft(
 ): Promise<void> {
   if (url === '') {
     throw new Error('No Loft url provided')
-  }
-
-  try {
-    new URL(url)
-  } catch (error) {
-    throw new Error('Invalid Loft url provided')
   }
 
   if (accessKey === '') {
