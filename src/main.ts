@@ -13,8 +13,10 @@ async function run(): Promise<void> {
     core.startGroup('Install Loft CLI')
     const version: string = core.getInput('version') || 'latest'
     await installLoft(runnerPlatform, architecture, version)
-  } catch (error) {
-    core.setFailed(error.message)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   } finally {
     core.endGroup()
   }
@@ -28,8 +30,10 @@ async function run(): Promise<void> {
     const insecure: boolean = core.getBooleanInput('insecure')
     const dockerLogin: boolean = core.getBooleanInput('docker-login')
     await loginToLoft(loftUrl, loftAccessKey, insecure, dockerLogin)
-  } catch (error) {
-    core.setFailed(error.message)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   } finally {
     core.endGroup()
   }
@@ -40,8 +44,10 @@ async function run(): Promise<void> {
       core.startGroup('Install kubectl')
       const kubectlVersion = core.getInput('kubectl-version') || 'latest'
       await installKubectl(runnerPlatform, architecture, kubectlVersion)
-    } catch (error) {
-      core.setFailed(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
     } finally {
       core.endGroup()
     }

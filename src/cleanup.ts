@@ -8,8 +8,10 @@ async function run(): Promise<void> {
     core.startGroup('Remove Loft Configuration')
     const homeDir = homedir()
     await io.rmRF(path.join(homeDir, '.loft'))
-  } catch (error) {
-    core.setFailed(error.message)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   } finally {
     core.endGroup()
   }

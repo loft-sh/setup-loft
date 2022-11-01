@@ -1,4 +1,3 @@
-import * as core from '@actions/core'
 import {exec} from '@actions/exec'
 
 export async function loginToLoft(
@@ -19,13 +18,7 @@ export async function loginToLoft(
     await exec(
       `loft login ${url} --access-key ${accessKey} --docker-login=${dockerLogin} --insecure=${insecure}`
     )
-  } catch (error) {
-    core.debug(`Loft command failed:
-- command:  ${error.cmd}
-- exitCode: ${error.code}
-- stdout:   ${error.stdout}
-- stderr:   ${error.stderr}
-`)
+  } catch (error: unknown) {
     throw error
   }
 }
