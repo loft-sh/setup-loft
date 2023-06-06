@@ -379,7 +379,7 @@ function run() {
         finally {
             core.endGroup();
         }
-        const kubectlInstallEnabled = core.getBooleanInput('kubectl-install') || true;
+        const kubectlInstallEnabled = core.getBooleanInput('kubectl-install');
         if (kubectlInstallEnabled) {
             try {
                 core.startGroup('Install kubectl');
