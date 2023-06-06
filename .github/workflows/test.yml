@@ -57,7 +57,6 @@ jobs:
           - windows-2019
           - ubuntu-latest
           - ubuntu-20.04
-          - ubuntu-18.04
           - macos-latest
           - macos-11
           - macos-10.15
@@ -77,3 +76,23 @@ jobs:
           kubectl-install: true
           kubectl-version: ${{ matrix.kubectl-version }}
       - run: kubectl version --client --short
+  test-kubectl-install-default:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          version: v2.3.2
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - run: kubectl version --client --short
+  test-kubectl-install-disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          version: v2.3.2
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          kubectl-install: false
